@@ -786,3 +786,28 @@ def update_igdb(legacy_df, client_id, client_secret):
     )
     print('Actualizacion de IGDB completada')
     return new_df
+
+
+def get_igdb(client_id, client_secret):
+    '''
+    Definimos la funcion que obtendra los resultados para el dataset
+    '''
+    headers_req = get_headers(client_id, client_secret)
+    new_df = get_from_igdb(headers_req)
+    new_df = transform_df(new_df)
+    new_df = (
+        new_df
+        .explode('platforms')
+        .assign(
+            release_dates=lambda df: df.apply(get_dates, axis=1)
+        )
+        .sort_values('updated_at')
+        .drop_duplicates(subset=['id', 'platforms'], keep='last')
+        .sort_values(
+            ['name', 'first_release_date', 'platforms'],
+            ascending=[True, True, True]
+        )
+        .reset_index(drop=True)
+        )
+    print('Datos de IGDB obtenidos')
+    return new_df

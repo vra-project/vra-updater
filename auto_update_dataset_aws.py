@@ -24,10 +24,6 @@ from rawg import get_rawg
 config = ConfigParser()
 config.read('secrets.toml', encoding='utf-8')
 
-AWS_ACCESS_KEY_ID = config['AWS']['aws_access_key_id']
-AWS_SECRET_ACCESS_KEY = config['AWS']['aws_secret_access_key']
-AWS_SESSION_TOKEN = config['AWS']['aws_session_token']
-
 CLIENT_ID = config['IGDB']['client_id']
 CLIENT_SECRET = config['IGDB']['client_secret']
 
@@ -53,12 +49,7 @@ warnings.filterwarnings('ignore')
 try:
     legacy_df = (
         pd.read_feather(
-            f'{BUCKET_S3}/{FILE_NAME}.feather',
-            storage_options={
-                'key': AWS_ACCESS_KEY_ID,
-                'secret': AWS_SECRET_ACCESS_KEY,
-                'token': AWS_SESSION_TOKEN
-            }
+            f'{BUCKET_S3}/{FILE_NAME}.feather'
         )
     )
     print('Dataset cargado correctamente desde S3')
@@ -90,12 +81,7 @@ final_df = get_rawg(rated_df, RAWG_KEYS, True)
 try:
     final_df.reset_index(drop=True).astype(str).to_feather(
         f'{BUCKET_S3}/{NEW_FILE_NAME}.feather',
-        compression='lz4',
-        storage_options={
-            "key": AWS_ACCESS_KEY_ID,
-            "secret": AWS_SECRET_ACCESS_KEY,
-            "token": AWS_SESSION_TOKEN
-        }
+        compression='lz4'
     )
     print('Dataset creado en S3')
     legacy_df.reset_index(drop=True).astype(str).to_feather(

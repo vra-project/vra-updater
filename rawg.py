@@ -168,7 +168,7 @@ def update_process(rated_df):
         .loc[
             (
                 rated_df['release_dates'] >=
-                dt.datetime.today() - relativedelta(months=3)
+                dt.datetime.today() - relativedelta(months=1)
                 ) &
             (
                 rated_df['release_dates'] <=
@@ -228,7 +228,7 @@ def obtain_new(rated_df):
         .merge(
             pd.DataFrame(
                 rawg_df
-                .loc[rawg_df['RAWG_equal_name'] is True]
+                .loc[rawg_df['RAWG_equal_name'] == True]
                 .drop_duplicates('RAWG_link')
                 ['RAWG_link'].map(obtain_devs).tolist(),
                 columns=['RAWG_link', 'devs', 'advanced_devs']
@@ -246,7 +246,7 @@ def get_rawg(rated_df, keys, update=True):
     Definimos la funcion que obtendra datos desde RAWG
     '''
     global KEY_SEARCH
-    KEY_SEARCH = keys[0]
+    KEY_SEARCH = keys[3]
     global KEY_UPDATE
     KEY_UPDATE = keys[2]
 
@@ -262,7 +262,7 @@ def get_rawg(rated_df, keys, update=True):
     plats = dict()
     for page in [1, 2]:
         for plat in session.get(
-            f'{API_URL}/platforms?key={keys[0]}&page_size=40&page={page}'
+            f'{API_URL}/platforms?key={KEY_SEARCH}&page_size=40&page={page}'
         ).json()['results']:
             plats[plat['name']] = plat['id']
 
@@ -339,7 +339,9 @@ def get_rawg(rated_df, keys, update=True):
 
     if update:
         rated_df = update_process(rated_df)
-        rawg_df = obtain_new(rated_df)
+        rawg_df = obtain_new(
+            rated_df.loc[rated_df['RAWG_equal_name'].isnull()]
+            )
         final_df = column_merge(rated_df, rawg_df, 'id')
 
     else:
@@ -353,4 +355,4 @@ def get_rawg(rated_df, keys, update=True):
 
         final_df = rated_df.merge(rawg_df, on='id', how='left')
 
-    return final_df
+    return final_df.drop_duplicates(['id', 'platforms'])

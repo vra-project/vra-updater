@@ -12,7 +12,7 @@ import warnings
 import datetime as dt
 import pandas as pd
 from botocore.exceptions import ClientError
-from igdb import update_igdb
+from igdb import get_igdb
 from hltb import get_hltb
 from opencritic import get_oc
 from rawg import get_rawg
@@ -43,47 +43,16 @@ FILE_NAME = 'games'
 NEW_FILE_NAME = FILE_NAME
 
 warnings.filterwarnings('ignore')
-# %%
-# Cargamos el dataset existente
-# Tendremos una versión en S3 y otra en local, para evitar errores de conexión
-# En este paso también transformaremos las fechas y otra serie de datos que
-# requeriremos más adelante
-
-
-try:
-    legacy_df = (
-        pd.read_feather(
-            f'{BUCKET_S3}/{FILE_NAME}.feather',
-            storage_options={
-                'key': AWS_ACCESS_KEY_ID,
-                'secret': AWS_SECRET_ACCESS_KEY,
-                'token': AWS_SESSION_TOKEN
-            }
-        )
-    )
-    print('Dataset cargado correctamente desde S3')
-except OSError or ClientError:
-    print('No se ha podido cargar el dataset')
-
-legacy_df = (
-    legacy_df
-    .assign(
-        first_release_date=lambda df: pd.to_datetime(df['first_release_date']),
-        release_dates=lambda df: pd.to_datetime(df['release_dates']),
-        updated_at=lambda df: pd.to_datetime(df['updated_at'])
-        )
-    )
-legacy_df['id'] = legacy_df['id'].astype(int)
 
 # %%
-# En primer lugar, obtendremos las novedades en IGDB
-igdb_df = update_igdb(legacy_df, CLIENT_ID, CLIENT_SECRET)
+# En primer lugar, obtendremos los datos de IGDB
+igdb_df = get_igdb(CLIENT_ID, CLIENT_SECRET)
 # Después, conectamos con HLTB
-hltb_df = get_hltb(igdb_df, True)
+hltb_df = get_hltb(igdb_df, False)
 # Realizamos la conexion con Opencritic
-rated_df = get_oc(hltb_df, True)
+rated_df = get_oc(hltb_df, False)
 # Realizamos la conexion con RAWG
-final_df = get_rawg(rated_df, RAWG_KEYS, True)
+final_df = get_rawg(rated_df, RAWG_KEYS, False)
 
 # %%
 # Creamos un fichero con el DataFrame resultante

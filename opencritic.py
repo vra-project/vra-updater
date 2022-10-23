@@ -30,7 +30,7 @@ def find_oc(game_id, name, plat):
     '''
     Encontramos el nombre de cada juego en Opencritic
     '''
-    result = process.extractOne(name, games_plat[plat_dict.get(plat)])
+    result = process.extractOne(name, GAMES_PLAT[plat_dict.get(plat)])
     try:
         if result[1] >= 90:
             return [game_id, True, result[0]]
