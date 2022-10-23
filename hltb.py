@@ -425,7 +425,10 @@ def get_hltb(igdb_df, update=True):
                 .reset_index(drop=True)
                 )
 
-    platforms_df = igdb_df['platforms'].unique()
+    platforms_df = pd.DataFrame(
+        data=igdb_df['platforms'].unique(),
+        columns=['platforms']
+        )
     choices = HLTB_platforms
     platforms_df['close_plat'] = (
         platforms_df['platforms']
