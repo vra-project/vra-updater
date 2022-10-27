@@ -1,2 +1,6 @@
 secrets.toml
 Dockerfile
+__pycache__
+games.csv
+games.feather
+.gitignore

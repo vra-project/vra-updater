@@ -35,6 +35,7 @@ RAWG_KEYS = [
 ]
 
 BUCKET_S3 = config['AWS']['bucket_s3']
+FOLDER = 'dataset'
 FILE_NAME = 'games'
 NEW_FILE_NAME = FILE_NAME
 
@@ -49,7 +50,7 @@ warnings.filterwarnings('ignore')
 try:
     legacy_df = (
         pd.read_feather(
-            f'{BUCKET_S3}/{FILE_NAME}.feather'
+            f'{BUCKET_S3}/{FOLDER}/{FILE_NAME}.feather',
         )
     )
     print('Dataset cargado correctamente desde S3')
@@ -80,7 +81,7 @@ final_df = get_rawg(rated_df, RAWG_KEYS, True)
 # Creamos un fichero con el DataFrame resultante
 try:
     final_df.reset_index(drop=True).astype(str).to_feather(
-        f'{BUCKET_S3}/{NEW_FILE_NAME}.feather',
+        f'{BUCKET_S3}/{FOLDER}/{NEW_FILE_NAME}.feather',
         compression='lz4'
     )
     print('Dataset creado en S3')
