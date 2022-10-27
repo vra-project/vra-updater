@@ -5,7 +5,7 @@ Programa utilizado para realizar la ETL
 - Carga en bucket S3
 '''
 # %%
-# Cargamos las librerías necesarias para realizar este proceso
+# Se definen las librerías necesarias para realizar este proceso
 
 from configparser import ConfigParser
 import warnings
@@ -17,9 +17,9 @@ from hltb import get_hltb
 from opencritic import get_oc
 from rawg import get_rawg
 # %%
-# Cargamos las claves necesarias para utilizar a lo largo del proceso
-# Se usarán keys para acceder a las APIs de IGDB y RAWG
-# También necesitamos claves de acceso a nuestro servidor de AWS
+# Se cargan las claves necesarias para utilizar a lo largo del proceso
+# Se usaran keys para acceder a las APIs de IGDB y RAWG
+# Tambien se necesitan claves de acceso al S3 de AWS
 
 config = ConfigParser()
 config.read('secrets.toml', encoding='utf-8')
@@ -41,10 +41,9 @@ NEW_FILE_NAME = FILE_NAME
 
 warnings.filterwarnings('ignore')
 # %%
-# Cargamos el dataset existente
-# Tendremos una versión en S3 y otra en local, para evitar errores de conexión
-# En este paso también transformaremos las fechas y otra serie de datos que
-# requeriremos más adelante
+# Se carga el dataset existente
+# En este paso también se transformaran las fechas y otra serie de datos que
+# se requeriran más adelante
 
 
 try:
@@ -68,17 +67,17 @@ legacy_df = (
 legacy_df['id'] = legacy_df['id'].astype(int)
 
 # %%
-# En primer lugar, obtendremos las novedades en IGDB
+# En primer lugar, se obtienen las novedades en IGDB
 igdb_df = update_igdb(legacy_df, CLIENT_ID, CLIENT_SECRET)
-# Después, conectamos con HLTB
+# Después, se conecta con HLTB
 hltb_df = get_hltb(igdb_df, True)
-# Realizamos la conexion con Opencritic
+# Se realiza la conexion con Opencritic
 rated_df = get_oc(hltb_df, True)
-# Realizamos la conexion con RAWG
+# Se realiza la conexion con RAWG
 final_df = get_rawg(rated_df, RAWG_KEYS, True)
 
 # %%
-# Creamos un fichero con el DataFrame resultante
+# Se crea un fichero con el DataFrame resultante
 try:
     final_df.reset_index(drop=True).astype(str).to_feather(
         f'{BUCKET_S3}/{FOLDER}/{NEW_FILE_NAME}.feather',

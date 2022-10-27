@@ -28,7 +28,7 @@ def number_or_not(string):
 
 def find_oc(game_id, name, plat):
     '''
-    Encontramos el nombre de cada juego en Opencritic
+    Se encuentra el nombre de cada juego en Opencritic
     '''
     result = process.extractOne(name, GAMES_PLAT[plat_dict.get(plat)])
     try:
@@ -41,7 +41,7 @@ def find_oc(game_id, name, plat):
 
 def not_null(original, new):
     '''
-    Nos quedamos con los datos nuevos si existiesen
+    Se actualiza con los datos nuevos si existiesen
     '''
     if pd.isnull(new):
         return original
@@ -73,7 +73,7 @@ def column_merge(full_df, small_df, where='id'):
 
 
 # %%
-# Definimos una sesion para realizar una serie de reintentos en caso de fallos
+# Se define una sesion para realizar una serie de reintentos en caso de fallos
 # a la hora de consultar las distintas urls utilizadas
 session = requests.Session()
 retries = Retry(
@@ -84,7 +84,7 @@ retries = Retry(
 session.mount('https://', HTTPAdapter(max_retries=retries))
 
 # %%
-# Definimos una serie de parametros que nos resultaran de utilidad a lo largo
+# Se define una serie de parametros que nos resultaran de utilidad a lo largo
 # de esta libreria
 plat_dict = {
     'PC (Microsoft Windows)': 'PC',
@@ -112,15 +112,13 @@ plat_dict = {
 GAME_URL = 'https://opencritic.com/game/'
 
 # %%
-'''
-Definimos las funciones que se usaran en el tratamiento de los datos de cada
-uno de los campos a procesar
-'''
+# Se definen las funciones que se usaran en el tratamiento de los datos de cada
+# uno de los campos a procesar
 
 
 def get_oc_links(games_df):
     '''
-    Obtenemos los links disponibles en OpenCritic
+    Se obtienen los links disponibles en OpenCritic
     '''
     url_base = 'https://opencritic.com/browse/all/all-time/date?page='
     titles = []
@@ -197,7 +195,7 @@ def get_rating(game_id, oc_id):
 
 def get_oc(hltb_df, update=True):
     '''
-    Definimos la funcion que obtendra datos desde OpenCritic
+    Se define la funcion que obtendra datos desde OpenCritic
     '''
     if update:
         update_df = (

@@ -4,7 +4,7 @@ Libreria utilizada para la obtencion del dataset procedente de IGDB
 
 # %%
 
-# Cargamos las librerias necesarias para realizar este proceso
+# Se cargan las librerias necesarias para realizar este proceso
 import datetime as dt
 from time import sleep
 import requests
@@ -219,7 +219,7 @@ def get_headers(client_id, client_secret):
 
 
 # %%
-# Definimos una sesion para realizar una serie de reintentos en caso de fallos
+# Se define una sesion para realizar una serie de reintentos en caso de fallos
 # a la hora de consultar las distintas urls utilizadas
 
 session = requests.Session()
@@ -235,7 +235,7 @@ session.mount('https://', HTTPAdapter(max_retries=retries))
 
 def dict_load(headers_dict):
     '''
-    Creamos una serie de diccionarios que se usara a lo largo de todo el
+    Se crean una serie de diccionarios que se usara a lo largo de todo el
     proceso
     '''
 
@@ -369,7 +369,7 @@ def dict_load(headers_dict):
 
 
 # %%
-# Definimos una serie de parametros que nos resultaran de utilidad a lo largo
+# Se define una serie de parametros que nos resultaran de utilidad a lo largo
 # de esta libreria
 
 BODY_QUERY_FIX = (
@@ -387,7 +387,7 @@ BASE_URL = 'https://api.igdb.com/v4'
 
 # %%
 '''
-Definimos las funciones que se usaran en el tratamiento de los datos de cada
+Se definen las funciones que se usaran en el tratamiento de los datos de cada
 uno de los campos a procesar
 '''
 
@@ -723,7 +723,7 @@ def transform_df(updates_df):
 
 def platform_cleaning(games_df):
     '''
-    Limpiamos los juegos de aquellas plataformas que tengan menos de 20 juegos
+    Se limpian los juegos de aquellas plataformas que tengan menos de 20 juegos
     '''
     return (
         games_df
@@ -748,7 +748,7 @@ def platform_cleaning(games_df):
 
 def update_igdb(legacy_df, client_id, client_secret):
     '''
-    Definimos la funcion que obtendra nuevos resultados para el dataset y
+    Se define la funcion que obtendra nuevos resultados para el dataset y
     actualizara los anteriores
     '''
     headers_req = get_headers(client_id, client_secret)
@@ -790,7 +790,7 @@ def update_igdb(legacy_df, client_id, client_secret):
 
 def get_igdb(client_id, client_secret):
     '''
-    Definimos la funcion que obtendra los resultados para el dataset
+    Se define la funcion que obtendra los resultados para el dataset
     '''
     headers_req = get_headers(client_id, client_secret)
     new_df = get_from_igdb(headers_req)

@@ -4,7 +4,7 @@ Libreria utilizada para la obtencion del dataset procedente de HLTB
 
 # %%
 
-# Cargamos las librerias necesarias para realizar este proceso
+# Se cargan las librerias necesarias para realizar este proceso
 import re
 import json
 from difflib import SequenceMatcher
@@ -102,7 +102,7 @@ def get_payload(game_title, plat=''):
 
 def not_null(original, new):
     '''
-    Nos quedamos con los datos nuevos si existiesen
+    Se actualizan los datos nuevos
     '''
     if pd.isnull(new):
         return original
@@ -135,7 +135,7 @@ def column_merge(full_df, small_df, where='id'):
 
 # %%
 
-# Definimos una sesion para realizar una serie de reintentos en caso de fallos
+# Se define una sesion para realizar una serie de reintentos en caso de fallos
 # a la hora de consultar las distintas urls utilizadas
 session = requests.Session()
 retries = Retry(
@@ -147,7 +147,7 @@ session.mount('https://', HTTPAdapter(max_retries=retries))
 
 # %%
 
-# Definimos una serie de parametros que nos resultaran de utilidad a lo largo
+# Se definen una serie de parametros que resultaran de utilidad a lo largo
 # de esta libreria
 BASE_URL = 'https://howlongtobeat.com/'
 REFERER_HEADER = BASE_URL
@@ -176,10 +176,8 @@ HLTB_platforms = [
 ]
 
 # %%
-'''
-Definimos las funciones que se usaran en el tratamiento de los datos de cada
-uno de los campos a procesar
-'''
+# Se definen las funciones que se usaran en el tratamiento de los datos de cada
+# uno de los campos a procesar
 
 
 def get_times(game_title, game_id, n_count=1, game_type='', platform=''):
@@ -330,7 +328,7 @@ def get_times_id(game_title, game_id):
 
 def get_new_times(original_df, date=dt.datetime(year=1970, month=1, day=1)):
     '''
-    Obtenemos los nuevos tiempos en base a un DataFrame y una fecha lÃ­mite
+    Se obtienen los nuevos tiempos en base a un DataFrame y una fecha li­mite
     '''
     if date == 'null':
         updated_df = (
@@ -401,7 +399,7 @@ def prepare_to_time(games_df, update=True):
 
 def get_hltb(igdb_df, update=True):
     '''
-    Definimos la funcion que obtendra datos desde HLTB
+    Se define la funcion que obtendra datos desde HLTB
     '''
     game_count = igdb_df.drop_duplicates('id')['name'].value_counts()
     igdb_df = (

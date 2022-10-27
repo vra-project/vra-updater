@@ -20,7 +20,7 @@ import numpy as np
 
 def not_null(original, new):
     '''
-    Nos quedamos con los datos nuevos si existiesen
+    Se actualiza el dataframe con los datos nuevos si existiesen
     '''
     if isinstance(new, list):
         return original
@@ -54,7 +54,7 @@ def column_merge(full_df, small_df, where='id'):
 
 
 # %%
-# Definimos una sesion para realizar una serie de reintentos en caso de fallos
+# Se define una sesion para realizar una serie de reintentos en caso de fallos
 # a la hora de consultar las distintas urls utilizadas
 session = requests.Session()
 retries = Retry(
@@ -65,14 +65,14 @@ retries = Retry(
 session.mount('https://', HTTPAdapter(max_retries=retries))
 
 # %%
-# Definimos una serie de parametros que nos resultaran de utilidad a lo largo
+# Se define una serie de parametros que nos resultaran de utilidad a lo largo
 # de esta libreria
 API_URL = 'https://api.rawg.io/api'
 BASE_URL = 'https://rawg.io'
 
 # %%
 '''
-Definimos las funciones que se usaran en el tratamiento de los datos de cada
+Se definen las funciones que se usaran en el tratamiento de los datos de cada
 uno de los campos a procesar
 '''
 
@@ -243,7 +243,7 @@ def obtain_new(rated_df):
 
 def get_rawg(rated_df, keys, update=True):
     '''
-    Definimos la funcion que obtendra datos desde RAWG
+    Se define la funcion que obtendra datos desde RAWG
     '''
     global KEY_SEARCH
     KEY_SEARCH = keys[3]
