@@ -86,7 +86,7 @@ try:
     print('Dataset creado en S3')
     legacy_df.reset_index(drop=True).astype(str).to_feather(
         (
-            f'{BUCKET_S3}/{NEW_FILE_NAME}_'
+            f'{BUCKET_S3}/{FOLDER}/{NEW_FILE_NAME}_'
             f'{dt.datetime.today().strftime("%y-%m-%d-%H")}.feather'
             ),
         compression='lz4'
