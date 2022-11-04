@@ -272,7 +272,7 @@ def get_times(game_title, game_id, n_count=1, game_type='', platform=''):
                 re.search('Pokémon', game['game_name']) and
                 re.search('Pokémon', game_name) and
                 re.search(
-                    ''.join(game_name.split('PokÃ©mon ')),
+                    ''.join(game_name.split('Pokémon ')),
                     game['game_name']
                 ) and
                 (

@@ -23,7 +23,9 @@ def not_null(original, new):
     Se actualiza el dataframe con los datos nuevos si existiesen
     '''
     if isinstance(new, list):
-        return original
+        if len(new) == 0:
+            return original
+        return new
     if pd.isnull(new):
         return original
     return new
